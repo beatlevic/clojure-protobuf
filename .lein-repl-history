@@ -7,3 +7,30 @@
              :image (ByteString/copyFrom (byte-array (map unchecked-byte [1 2 3 4 -1])))})
   (def p (apply protobuf Photo (apply concat data)))
 p
+  (use 'flatland.protobuf.core)
+  (import 'com.google.protobuf.ByteString)
+  (def Photo (protodef flatland.protobuf.test.Example$Photo))
+  (def Net (protodef caffe.protobuf.Caffe$NetParameter))
+  (def data {:id 7, :path "/photos/h2k3j4h9h23", :labels #{"hawaii" "family" "surfing"},
+             :attrs {"color space" "RGB", "dimensions" "1632x1224", "alpha" "no"},
+             :tags {4 {:person-id 4, :x-coord 607, :y-coord 813, :width 25, :height 27}}
+             :image (ByteString/copyFrom (byte-array (map unchecked-byte [1 2 3 4 -1])))})
+  (def p (apply protobuf Photo (apply concat data)))
+  (def pd (protobuf-dump p))
+  (import 'java.io.FileOutputStream)
+  (import 'java.io.FileInputStream)
+  (use 'flatland.protobuf.core)
+  (import 'com.google.protobuf.ByteString)
+  (def Photo (protodef flatland.protobuf.test.Example$Photo))
+  (def Net (protodef caffe.protobuf.Caffe$NetParameter))
+  (def data {:id 7, :path "/photos/h2k3j4h9h23", :labels #{"hawaii" "family" "surfing"},
+             :attrs {"color space" "RGB", "dimensions" "1632x1224", "alpha" "no"},
+             :tags {4 {:person-id 4, :x-coord 607, :y-coord 813, :width 25, :height 27}}
+             :image (ByteString/copyFrom (byte-array (map unchecked-byte [1 2 3 4 -1])))})
+  (def p (apply protobuf Photo (apply concat data)))
+  (def pd (protobuf-dump p))
+  (import 'java.io.FileOutputStream)
+  (import 'java.io.FileInputStream)
+(def s (protobuf-from-string Net (FileInputStream. "/Users/beatlevic/git/flatland-clojure-protobuf/resources/train_val.prototxt")))
+(def s  (protobuf-from-string Photo (FileInputStream. "/Users/beatlevic/git/flatland-clojure-protobuf/oy.txt")))
+s

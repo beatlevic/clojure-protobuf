@@ -13,6 +13,7 @@ package flatland.protobuf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.TextFormat;
 
 
 public class PersistentProtocolBufferMap extends APersistentMap implements IObj {
@@ -180,6 +182,18 @@ public class PersistentProtocolBufferMap extends APersistentMap implements IObj 
       } else {
         return null;
       }
+    }
+
+    public DynamicMessage.Builder parseFromString(InputStream input) throws IOException {
+      InputStreamReader reader = new InputStreamReader(input, "ASCII");
+      DynamicMessage.Builder builder = newBuilder();
+      TextFormat.merge(reader, builder);
+      return builder;
+      // if (builder.mergeDelimitedFrom(input)) {
+      //   return builder;
+      // } else {
+      //   return null;
+      // }
     }
 
     public DynamicMessage.Builder newBuilder() {
@@ -315,6 +329,17 @@ public class PersistentProtocolBufferMap extends APersistentMap implements IObj 
     }
   }
 
+  static public PersistentProtocolBufferMap parseFromString(Def def, InputStream input)
+          throws IOException {
+    DynamicMessage.Builder builder = def.parseFromString(input);
+    if (builder != null) {
+      return new PersistentProtocolBufferMap(null, def, builder);
+    } else {
+      return null;
+    }
+  }
+
+
   static public PersistentProtocolBufferMap construct(Def def, Object keyvals) {
     PersistentProtocolBufferMap protobuf = new PersistentProtocolBufferMap(null, def);
     return protobuf.cons(keyvals);
@@ -363,6 +388,10 @@ public class PersistentProtocolBufferMap extends APersistentMap implements IObj 
 
   public void writeTo(CodedOutputStream output) throws IOException {
     message().writeTo(output);
+  }
+
+  public String toString() {
+    return message().toString();
   }
 
   public void writeDelimitedTo(OutputStream output) throws IOException {

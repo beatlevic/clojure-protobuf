@@ -104,3 +104,27 @@
   "Get value at key ignoring extension fields."
   [^PersistentProtocolBufferMap p key]
   (.getValAt p key false))
+
+(defn protobuf-from-string-lazy
+  "Lazily read a sequence of length-delimited protobufs of the specified type from the given input stream."
+  [^PersistentProtocolBufferMap$Def type in]
+  (lazy-seq
+   (io!
+    (let [^InputStream in (input-stream in)]
+      (if-let [p (PersistentProtocolBufferMap/parseFromString type in)]
+        (cons p (protobuf-seq type in))
+        (.close in))))))
+
+(defn protobuf-from-string
+  "Lazily read a sequence of length-delimited protobufs of the specified type from the given input stream."
+  [^PersistentProtocolBufferMap$Def type in]
+  (io!
+   (let [^InputStream in (input-stream in)]
+     (if-let [p (PersistentProtocolBufferMap/parseFromString type in)]
+       p
+       (.close in)))))
+
+(defn to-string
+  "Get value at key ignoring extension fields."
+  [^PersistentProtocolBufferMap p]
+  (.toString p))
