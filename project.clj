@@ -10,5 +10,8 @@
                  [ordered-collections "0.4.0"]]
   :plugins [[lein-protobuf "0.4.2"]]
   :checksum-deps true
-  :java-source-paths ["src"]
-  :sign-releases false)
+  :repositories {"sonatype-snapshots" {:url "http://oss.sonatype.org/content/repositories/snapshots"
+                                       :snapshots true
+                                       :sign-releases false
+                                       :releases {:checksum :fail :update :always}}}
+  :java-source-paths ["src"])
