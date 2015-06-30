@@ -10,4 +10,5 @@
                  [ordered-collections "0.4.0"]]
   :plugins [[lein-protobuf "0.4.2"]]
   :checksum-deps true
-  :java-source-paths ["src"])
+  :java-source-paths ["src"]
+  :sign-releases false)
